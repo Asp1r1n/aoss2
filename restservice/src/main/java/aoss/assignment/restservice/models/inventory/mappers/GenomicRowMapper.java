@@ -4,7 +4,6 @@ package aoss.assignment.restservice.models.inventory.mappers;
    Email: progingisfun@gmail.com
    Date: 12.04.2020 */
 
-import aoss.assignment.restservice.models.inventory.CultureBox;
 import aoss.assignment.restservice.models.inventory.Genomic;
 import org.springframework.jdbc.core.RowMapper;
 

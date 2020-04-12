@@ -4,11 +4,9 @@ package aoss.assignment.restservice.controllers.inventory;
    Email: progingisfun@gmail.com
    Date: 12.04.2020 */
 
-import aoss.assignment.restservice.models.inventory.Shrub;
 import aoss.assignment.restservice.models.inventory.Tree;
 import aoss.assignment.restservice.services.inventory.TreesService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

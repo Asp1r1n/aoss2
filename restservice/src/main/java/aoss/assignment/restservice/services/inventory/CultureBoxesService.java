@@ -6,7 +6,6 @@ package aoss.assignment.restservice.services.inventory;
 
 import aoss.assignment.restservice.models.inventory.CultureBox;
 import aoss.assignment.restservice.repos.inventory.CultureBoxesRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -5,9 +5,7 @@ package aoss.assignment.restservice.repos.inventory;
    Date: 12.04.2020 */
 
 import aoss.assignment.restservice.models.inventory.Tree;
-import aoss.assignment.restservice.models.inventory.mappers.ShrubRowMapper;
 import aoss.assignment.restservice.models.inventory.mappers.TreeRowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -5,7 +5,6 @@ package aoss.assignment.restservice.repos.inventory;
    Date: 12.04.2020 */
 
 import aoss.assignment.restservice.models.inventory.Genomic;
-import aoss.assignment.restservice.models.inventory.mappers.CultureBoxRowMapper;
 import aoss.assignment.restservice.models.inventory.mappers.GenomicRowMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;

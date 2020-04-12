@@ -4,10 +4,8 @@ package aoss.assignment.restservice.services.inventory;
    Email: progingisfun@gmail.com
    Date: 12.04.2020 */
 
-import aoss.assignment.restservice.models.inventory.CultureBox;
 import aoss.assignment.restservice.models.inventory.Genomic;
 import aoss.assignment.restservice.repos.inventory.GenomicsRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

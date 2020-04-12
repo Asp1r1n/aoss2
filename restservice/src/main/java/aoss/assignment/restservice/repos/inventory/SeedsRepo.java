@@ -5,9 +5,7 @@ package aoss.assignment.restservice.repos.inventory;
    Date: 12.04.2020 */
 
 import aoss.assignment.restservice.models.inventory.Seed;
-import aoss.assignment.restservice.models.inventory.mappers.ReferenceMaterialRowMapper;
 import aoss.assignment.restservice.models.inventory.mappers.SeedRowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -4,7 +4,6 @@ package aoss.assignment.restservice.controllers.inventory;
    Email: progingisfun@gmail.com
    Date: 12.04.2020 */
 
-import aoss.assignment.restservice.models.inventory.Processing;
 import aoss.assignment.restservice.models.inventory.ReferenceMaterial;
 import aoss.assignment.restservice.services.inventory.ReferenceMaterialsService;
 import org.springframework.beans.BeanUtils;

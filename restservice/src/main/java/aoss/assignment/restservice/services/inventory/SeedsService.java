@@ -6,7 +6,6 @@ package aoss.assignment.restservice.services.inventory;
 
 import aoss.assignment.restservice.models.inventory.Seed;
 import aoss.assignment.restservice.repos.inventory.SeedsRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
