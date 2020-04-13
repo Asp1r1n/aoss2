@@ -4,6 +4,7 @@ public class App {
     public static final String URL = "http://localhost:8080";
 
     public static final String INVENTORY = "/inventory/";
+    public static final String ORDER = "/orders/";
 
     public static final String TREES_TABLE = "trees";
     public static final String SHRUBS_TABLE = "shrubs";

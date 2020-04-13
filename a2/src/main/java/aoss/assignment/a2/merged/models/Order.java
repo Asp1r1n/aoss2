@@ -1,15 +1,51 @@
 package aoss.assignment.a2.merged.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Calendar;
+
 public class Order {
+    @SerializedName("id")
     private int order_id;
+    @SerializedName("date")
     private String order_date;
+    @SerializedName("firstName")
     private String first_name;
+    @SerializedName("lastName")
     private String last_name;
+    @SerializedName("address")
     private String address;
+    @SerializedName("phone")
     private String phone;
+    @SerializedName("totalCost")
     private float total_cost;
+    @SerializedName("shipped")
     private int shipped;
+    @SerializedName("orderTable")
     private String ordertable;
+
+    public Order(String first_name, String last_name, String address, String phone, float total_cost) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.address = address;
+        this.phone = phone;
+        this.total_cost = total_cost;
+        this.shipped = 0;
+
+        Calendar rightNow = Calendar.getInstance();
+
+        int TheHour = rightNow.get(rightNow.HOUR_OF_DAY);
+        int TheMinute = rightNow.get(rightNow.MINUTE);
+        int TheSecond = rightNow.get(rightNow.SECOND);
+        int TheDay = rightNow.get(rightNow.DAY_OF_WEEK);
+        int TheMonth = rightNow.get(rightNow.MONTH);
+        int TheYear = rightNow.get(rightNow.YEAR);
+
+        this.order_date = TheMonth + "/" + TheDay + "/" + TheYear + " "
+                + TheHour + ":" + TheMinute + ":" + TheSecond;
+
+        this.ordertable = "order" + String.valueOf(rightNow.getTimeInMillis());
+    }
 
     public int getOrder_id() {
         return order_id;
