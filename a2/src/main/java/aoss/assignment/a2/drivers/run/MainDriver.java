@@ -8,6 +8,7 @@ import aoss.assignment.a2.eeps.apps.inventory.InventoryMainFrame;
 import aoss.assignment.a2.eeps.apps.order.OrderMainFrame;
 import aoss.assignment.a2.eeps.apps.shipping.ShippingMainFrame;
 import aoss.assignment.a2.leaftech.inventory.InventoryManagerFrame;
+import aoss.assignment.a2.merged.views.OrderAppFrame;
 
 public class MainDriver implements RunDriver {
 
@@ -35,6 +36,13 @@ public class MainDriver implements RunDriver {
                 break;
             case "ess":
                 java.awt.EventQueue.invokeLater(() -> new ShippingMainFrame().setVisible(true));
+                break;
+
+            case "mis":
+                java.awt.EventQueue.invokeLater(() -> new aoss.assignment.a2.merged.views.InventoryManagerFrame().setVisible(true));
+                break;
+            case "mos":
+                java.awt.EventQueue.invokeLater(() -> new OrderAppFrame().setVisible(true));
                 break;
             default:
                 System.exit(-1);
