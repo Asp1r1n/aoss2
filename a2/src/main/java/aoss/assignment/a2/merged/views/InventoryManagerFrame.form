@@ -57,7 +57,7 @@
                   <text value="Price"/>
                 </properties>
               </component>
-              <component id="98931" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+              <component id="98931" class="javax.swing.JTextField" binding="tfPrice">
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -73,7 +73,7 @@
                   <text value="Product Description"/>
                 </properties>
               </component>
-              <component id="4ac58" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+              <component id="4ac58" class="javax.swing.JTextField" binding="tfDescription">
                 <constraints>
                   <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -89,7 +89,7 @@
                   <text value="Quantity"/>
                 </properties>
               </component>
-              <component id="51532" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+              <component id="51532" class="javax.swing.JTextField" binding="tfQuantity">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -105,7 +105,7 @@
                   <text value="Product ID"/>
                 </properties>
               </component>
-              <component id="e3472" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+              <component id="e3472" class="javax.swing.JTextField" binding="tfId">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -167,7 +167,7 @@
               </component>
             </children>
           </grid>
-          <component id="9ab1" class="javax.swing.JButton" binding="addItemButton" default-binding="true">
+          <component id="9ab1" class="javax.swing.JButton" binding="btAddItem">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="200" height="20"/>

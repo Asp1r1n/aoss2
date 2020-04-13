@@ -23,11 +23,11 @@ public class InventoryManagerFrame extends JFrame {
     private JRadioButton rdCultureboxes;
     private JRadioButton rdGenomics;
     private JRadioButton rdProcessing;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField1;
-    private JButton addItemButton;
+    private JTextField tfQuantity;
+    private JTextField tfPrice;
+    private JTextField tfDescription;
+    private JTextField tfId;
+    private JButton btAddItem;
 
     private TreesController treesController;
     private ShrubsController shrubsController;
@@ -51,6 +51,13 @@ public class InventoryManagerFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 getList();
+            }
+        });
+
+        btAddItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                postItem();
             }
         });
     }
@@ -93,6 +100,7 @@ public class InventoryManagerFrame extends JFrame {
 
     private void initComponent() {
         //TODO: Handle Component
+
     }
 
     private void initController() {
@@ -155,6 +163,127 @@ public class InventoryManagerFrame extends JFrame {
         }
 
         taResult.setText(result);
+    }
+
+    private boolean postItem() {
+        String id, description;
+        int quantity;
+        double price;
+
+        if (!tfId.getText().isEmpty()) {
+            id = tfId.getText();
+        } else {
+            taResult.setText("Must enter ID");
+            return false;
+        }
+
+        if (!tfQuantity.getText().isEmpty()) {
+            try {
+                quantity = Integer.parseInt(tfQuantity.getText());
+            } catch (NumberFormatException e) {
+                taResult.setText("Quantity should be an integer");
+                return false;
+            }
+        } else {
+            taResult.setText("Must enter Quantity");
+            return false;
+        }
+
+        if (!tfPrice.getText().isEmpty()) {
+            try {
+                price = Double.parseDouble(tfPrice.getText());
+            } catch (NumberFormatException e) {
+                taResult.setText("Price should be an double");
+                return false;
+            }
+        } else {
+            taResult.setText("Must enter Price");
+            return false;
+        }
+
+        if (!tfDescription.getText().isEmpty()) {
+            description = tfDescription.getText();
+        } else {
+            taResult.setText("Must enter Description");
+            return false;
+        }
+
+        InventoryController controller = getSelectedController();
+        if (controller != null) {
+            controller.create(new Item(id, description, quantity, price));
+        } else {
+            taResult.setText("Must select Category button");
+            return false;
+        }
+
+
+        taResult.setText("Input data success!");
+        return true;
+    }
+
+    private InventoryController getSelectedController() {
+        if (rdTrees.isSelected()) {
+            return treesController;
+        }
+
+        if (rdShurbs.isSelected()) {
+            return shrubsController;
+        }
+
+        if (rdSeeds.isSelected()) {
+            return seedsController;
+        }
+
+        if (rdCultureboxes.isSelected()) {
+            return cultureboxesController;
+        }
+
+        if (rdGenomics.isSelected()) {
+            return genomicsController;
+        }
+
+        if (rdProcessing.isSelected()) {
+            return processingController;
+        }
+
+        if (rdReferencematerials.isSelected()) {
+            return referencematerialsController;
+        }
+
+        return null;
+    }
+
+    private String getSelectedTag() {
+        String result = null;
+
+        if (rdTrees.isSelected()) {
+            result = "TREE";
+        }
+
+        if (rdShurbs.isSelected()) {
+            result = "SHURB";
+        }
+
+        if (rdSeeds.isSelected()) {
+            result = "SEED";
+        }
+
+        if (rdCultureboxes.isSelected()) {
+            result = "CULTUREBOX";
+        }
+
+        if (rdGenomics.isSelected()) {
+            result = "GENOMIC";
+        }
+
+        if (rdProcessing.isSelected()) {
+            result = "PROCESSING";
+        }
+
+        if (rdReferencematerials.isSelected()) {
+            result = "REFERENCEMATERIAL";
+        }
+        return result;
     }
 
     public static void main(String[] args) {

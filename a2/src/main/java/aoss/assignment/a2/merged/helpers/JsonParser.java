@@ -8,11 +8,33 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class JsonParser {
-    public static ArrayList<Item> parseInventory(String json){
-        Gson gson = new Gson();
-        Type itemType = new TypeToken<ArrayList<Item>>(){}.getType();
+    public static ArrayList<Item> parseInventory(String json) {
+        Type itemType = new TypeToken<ArrayList<Item>>() {
+        }.getType();
+        ArrayList<Item> result = instance().fromJson(json, itemType);
 
-        ArrayList<Item> result = gson.fromJson(json, itemType);
         return result;
+    }
+
+    public static Item parseItem(String json) {
+        Item result = instance().fromJson(json, Item.class);
+
+        return result;
+    }
+
+    public static String fromIventory(ArrayList<Item> items) {
+        String result = instance().toJson(items);
+
+        return result;
+    }
+
+    public static String fromItem(Item item) {
+        String result = instance().toJson(item);
+
+        return result;
+    }
+
+    public static Gson instance() {
+        return new Gson();
     }
 }

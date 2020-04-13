@@ -15,7 +15,7 @@ public class Connector {
         String result = null;
         try {
             URL url = new URL(App.URL + address);
-            
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -44,23 +44,20 @@ public class Connector {
         return result;
     }
 
-    public static String post(String address) {
+    public static String post(String address, String data) {
         String result = null;
         try {
-            URL url = new URL(address);
+            URL url = new URL(App.URL + address);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
 
-            //TODO: Handle object
-            String input = "{\"qty\":100,\"name\":\"iPad 4\"}";
-
             OutputStream os = conn.getOutputStream();
-            os.write(input.getBytes());
+            os.write(data.getBytes());
             os.flush();
 
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + conn.getResponseCode());
             }

@@ -12,6 +12,13 @@ public class Item {
     @SerializedName("price")
     private double price;
 
+    public Item(String code, String description, int quantity, double price) {
+        this.code = code;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
     public String getCode() {
         return code;
     }
