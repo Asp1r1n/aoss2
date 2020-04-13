@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class InventoryController {
     public String address;
 
-    public InventoryController(){
+    public InventoryController() {
         this.address = App.INVENTORY;
     }
 
@@ -25,7 +25,7 @@ public class InventoryController {
     }
 
     public Item get(String id) {
-        String jsonResult = Connector.read(address+"/"+id);
+        String jsonResult = Connector.read(address + "/" + id);
         Item result = JsonParser.parseItem(jsonResult);
 
         return result;
@@ -41,13 +41,18 @@ public class InventoryController {
         return result;
     }
 
-    public ArrayList<Item> update(String id, Item item) {
-        ArrayList<Item> result = new ArrayList<>();
+    public Item update(String id, Item item) {
+        String itemString = JsonParser.fromItem(item);
+        String jsonResult = Connector.put(address + "/" + id, itemString);
+        System.out.println(jsonResult);
+        Item result = JsonParser.parseItem(jsonResult);
 
         return result;
     }
-    public ArrayList<Item> delete(String id) {
-        ArrayList<Item> result = new ArrayList<>();
+
+    public String delete(String id) {
+        String result = "";
+        result = Connector.delete(address + "/" + id);
 
         return result;
     }

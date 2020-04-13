@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class InventoryManagerFrame extends JFrame {
     private JPanel mainPanel;
@@ -28,6 +30,7 @@ public class InventoryManagerFrame extends JFrame {
     private JTextField tfDescription;
     private JTextField tfId;
     private JButton btAddItem;
+    private JPanel panelResult;
 
     private TreesController treesController;
     private ShrubsController shrubsController;
@@ -58,6 +61,18 @@ public class InventoryManagerFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 postItem();
+            }
+        });
+        decrementButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                updateItem();
+            }
+        });
+        deleteItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                deleteItem();
             }
         });
     }
@@ -114,46 +129,14 @@ public class InventoryManagerFrame extends JFrame {
     }
 
     private void getList() {
-        String selectedCategory = null;
+        String selectedCategory = getSelectedCategory();
         String result = "";
 
         ArrayList<Item> items = new ArrayList();
-        if (rdTrees.isSelected()) {
-            items = treesController.all();
-            selectedCategory = "TREE";
-        }
-
-        if (rdShurbs.isSelected()) {
-            items = shrubsController.all();
-            selectedCategory = "SHURB";
-        }
-
-        if (rdSeeds.isSelected()) {
-            items = seedsController.all();
-            selectedCategory = "SEED";
-        }
-
-        if (rdCultureboxes.isSelected()) {
-            items = cultureboxesController.all();
-            selectedCategory = "CULTUREBOX";
-        }
-
-        if (rdGenomics.isSelected()) {
-            items = genomicsController.all();
-            selectedCategory = "GENOMIC";
-        }
-
-        if (rdProcessing.isSelected()) {
-            items = processingController.all();
-            selectedCategory = "PROCESSING";
-        }
-
-        if (rdReferencematerials.isSelected()) {
-            items = referencematerialsController.all();
-            selectedCategory = "REFERENCEMATERIAL";
-        }
 
         if (selectedCategory != null) {
+            InventoryController controller = getController(selectedCategory);
+            items = controller.all();
             for (Item item : items) {
                 result += item.printItem(selectedCategory);
                 result += "\n";
@@ -208,7 +191,8 @@ public class InventoryManagerFrame extends JFrame {
             return false;
         }
 
-        InventoryController controller = getSelectedController();
+        String category = getSelectedCategory();
+        InventoryController controller = getController(category);
         if (controller != null) {
             controller.create(new Item(id, description, quantity, price));
         } else {
@@ -221,39 +205,107 @@ public class InventoryManagerFrame extends JFrame {
         return true;
     }
 
-    private InventoryController getSelectedController() {
-        if (rdTrees.isSelected()) {
-            return treesController;
+    private boolean updateItem() {
+        String selectedItem = taResult.getSelectedText();
+
+        if (selectedItem.isEmpty()) {
+            taResult.setText("Please select whole line of item by clicking 3 times");
+            return false;
         }
 
-        if (rdShurbs.isSelected()) {
-            return shrubsController;
+        if (selectedItem.contains(">>") && selectedItem.contains("::")) {
+            String parseItem[] = selectedItem.split(">>");
+            String category = parseItem[0];
+            String itemString = parseItem[1];
+
+            String[] categories = new String[]{"TREE", "SHRUB", "SEED", "CULTUREBOX", "GENOMIC", "PROCESSING", "REFERENCEMATERIAL"};
+            List<String> list = Arrays.asList(categories);
+
+            if (list.contains(category)) {
+                InventoryController controller = getController(category);
+
+                // Here we get the trailing index and parse out the productID
+                int endIndex = itemString.indexOf(":", 0);
+
+                if (endIndex < 0) {
+                    taResult.setText("Please select whole line of item by clicking 3 times");
+                    return false;
+                } else {
+                    String id = itemString.substring(0, endIndex);
+                    Item item = controller.get(id);
+                    item.setQuantity(item.getQuantity() - 1);
+
+                    controller.update(id, item);
+                    taResult.setText("Decrement Item success");
+                }
+            }
+        } else {
+            taResult.setText("Please select whole line of item by clicking 3 times");
+            return false;
         }
 
-        if (rdSeeds.isSelected()) {
-            return seedsController;
+        return true;
+    }
+
+    private boolean deleteItem() {
+        String selectedItem = taResult.getSelectedText();
+        if (selectedItem.isEmpty()) {
+            taResult.setText("Please select whole line of item by clicking 3 times");
+            return false;
         }
 
-        if (rdCultureboxes.isSelected()) {
-            return cultureboxesController;
+        if (selectedItem.contains(">>") && selectedItem.contains("::")) {
+            String parseItem[] = selectedItem.split(">>");
+            String category = parseItem[0];
+            String itemString = parseItem[1];
+
+            String[] categories = new String[]{"TREE", "SHRUB", "SEED", "CULTUREBOX", "GENOMIC", "PROCESSING", "REFERENCEMATERIAL"};
+            List<String> list = Arrays.asList(categories);
+
+            if (list.contains(category)) {
+                InventoryController controller = getController(category);
+
+                // Here we get the trailing index and parse out the productID
+                int endIndex = itemString.indexOf(":", 0);
+
+                if (endIndex < 0) {
+                    taResult.setText("Please select whole line of item by clicking 3 times");
+                    return false;
+                } else {
+                    String id = itemString.substring(0, endIndex);
+                    controller.delete(id);
+                    taResult.setText("Delete Item success");
+                }
+            }
+        } else {
+            taResult.setText("Please select whole line of item by clicking 3 times");
+            return false;
         }
 
-        if (rdGenomics.isSelected()) {
-            return genomicsController;
-        }
+        return true;
+    }
 
-        if (rdProcessing.isSelected()) {
-            return processingController;
+    private InventoryController getController(String category) {
+        switch (category) {
+            case "TREE":
+                return treesController;
+            case "SHRUB":
+                return shrubsController;
+            case "SEED":
+                return seedsController;
+            case "CULTUREBOX":
+                return cultureboxesController;
+            case "GENOMIC":
+                return genomicsController;
+            case "PROCESSING":
+                return processingController;
+            case "REFERENCEMATERIAL":
+                return referencematerialsController;
         }
-
-        if (rdReferencematerials.isSelected()) {
-            return referencematerialsController;
-        }
-
         return null;
     }
 
-    private String getSelectedTag() {
+    private String getSelectedCategory() {
         String result = null;
 
         if (rdTrees.isSelected()) {

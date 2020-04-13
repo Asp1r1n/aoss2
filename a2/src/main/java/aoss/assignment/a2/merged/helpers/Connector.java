@@ -80,4 +80,74 @@ public class Connector {
         }
         return result;
     }
+
+    public static String put(String address, String data) {
+        String result = null;
+        try {
+            URL url = new URL(App.URL + address);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(data.getBytes());
+            os.flush();
+
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+            String output;
+            result = "";
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                result += output;
+            }
+            conn.disconnect();
+            return result;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String delete(String address) {
+        String result = null;
+        try {
+            URL url = new URL(App.URL + address);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+            String output;
+            result = "";
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                result += output;
+            }
+            conn.disconnect();
+            return result;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
