@@ -2,6 +2,7 @@ package aoss.assignment.a2.merged.helpers;
 
 import aoss.assignment.a2.merged.models.Item;
 import aoss.assignment.a2.merged.models.Order;
+import aoss.assignment.a2.merged.models.OrderItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,6 +44,12 @@ public class JsonParser {
 
     public static String fromOrder(Order order) {
         String result = instance().toJson(order);
+
+        return result;
+    }
+
+    public static String fromOrderItem(OrderItem orderItem) {
+        String result = instance().toJson(orderItem);
 
         return result;
     }

@@ -1,9 +1,15 @@
 package aoss.assignment.a2.merged.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class OrderItem {
+    @SerializedName("id")
     private int item_id;
+    @SerializedName("productId")
     private String product_id;
+    @SerializedName("description")
     private String description;
+    @SerializedName("price")
     private float item_price;
 
     public OrderItem(Item item) {
