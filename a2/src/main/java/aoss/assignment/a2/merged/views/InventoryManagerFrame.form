@@ -201,7 +201,7 @@
                   <text value="Seeds"/>
                 </properties>
               </component>
-              <component id="9af10" class="javax.swing.JRadioButton" binding="rdShu">
+              <component id="9af10" class="javax.swing.JRadioButton" binding="rdShurbs">
                 <constraints>
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -209,7 +209,7 @@
                   <text value="Shurbs"/>
                 </properties>
               </component>
-              <component id="ec8e9" class="javax.swing.JRadioButton" binding="cultureBoxesRadioButton" default-binding="true">
+              <component id="ec8e9" class="javax.swing.JRadioButton" binding="rdCultureboxes">
                 <constraints>
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -217,7 +217,7 @@
                   <text value="Culture Boxes"/>
                 </properties>
               </component>
-              <component id="1fa13" class="javax.swing.JRadioButton" binding="geonomicsRadioButton" default-binding="true">
+              <component id="1fa13" class="javax.swing.JRadioButton" binding="rdGenomics">
                 <constraints>
                   <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -225,7 +225,7 @@
                   <text value="Geonomics"/>
                 </properties>
               </component>
-              <component id="26ef3" class="javax.swing.JRadioButton" binding="processingRadioButton" default-binding="true">
+              <component id="26ef3" class="javax.swing.JRadioButton" binding="rdProcessing">
                 <constraints>
                   <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -233,7 +233,7 @@
                   <text value="Processing"/>
                 </properties>
               </component>
-              <component id="3302c" class="javax.swing.JRadioButton" binding="referenceMaterialsRadioButton" default-binding="true">
+              <component id="3302c" class="javax.swing.JRadioButton" binding="rdReferencematerials">
                 <constraints>
                   <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -284,4 +284,15 @@
       </grid>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="categoryGroup">
+      <member id="407bb"/>
+      <member id="59a87"/>
+      <member id="9af10"/>
+      <member id="ec8e9"/>
+      <member id="1fa13"/>
+      <member id="26ef3"/>
+      <member id="3302c"/>
+    </group>
+  </buttonGroups>
 </form>
