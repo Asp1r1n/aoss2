@@ -313,7 +313,7 @@ public class InventoryManagerFrame extends JFrame {
         }
 
         if (rdShurbs.isSelected()) {
-            result = "SHURB";
+            result = "SHRUB";
         }
 
         if (rdSeeds.isSelected()) {
