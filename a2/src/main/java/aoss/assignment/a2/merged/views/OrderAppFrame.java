@@ -1,10 +1,12 @@
 package aoss.assignment.a2.merged.views;
 
+import aoss.assignment.a2.merged.controllers.auth.AuthController;
 import aoss.assignment.a2.merged.controllers.inventory.*;
 import aoss.assignment.a2.merged.controllers.orders.OrderController;
 import aoss.assignment.a2.merged.models.Item;
 import aoss.assignment.a2.merged.models.Order;
 import aoss.assignment.a2.merged.models.OrderItem;
+import aoss.assignment.a2.merged.models.UserSession;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -42,17 +44,22 @@ public class OrderAppFrame extends JFrame {
     private ReferencematerialsController referencematerialsController;
     private ProcessingController processingController;
     private OrderController orderController;
+    private AuthController authController;
 
     private ArrayList<OrderItem> orderItems;
+    private UserSession session;
 
-    public OrderAppFrame() {
+    public OrderAppFrame(UserSession session) {
         add(mainPanel);
         setTitle("Order App Manager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(950, 650);
 
+        this.session = session;
+        System.out.println("Session: " + session.getToken());
+
+        initMenu();
         initController();
-        initComponent();
 
         btTree.addActionListener(new ActionListener() {
             @Override
@@ -120,22 +127,73 @@ public class OrderAppFrame extends JFrame {
         });
     }
 
+    private void initMenu() {
+        JMenu menu = new JMenu("Menu");
+        JMenuItem menuInventory = new JMenuItem("Inventory Management");
+        JMenuItem menuShipping = new JMenuItem("Shipping");
+        JMenuItem menuLogout = new JMenuItem("Logout");
+
+        menu.add(menuInventory);
+        menu.add(menuShipping);
+        menu.add(menuLogout);
+
+        final JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
+        mb.add(menu);
+
+        menuInventory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                openInventoryFrame();
+            }
+        });
+
+        menuShipping.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                //TODO: Handle shipping frame
+            }
+        });
+
+        menuLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                logout();
+            }
+        });
+    }
+
+    private void openInventoryFrame() {
+        java.awt.EventQueue.invokeLater(() -> new InventoryManagerFrame(session).setVisible(true));
+        this.dispose();
+    }
+
+    private boolean logout() {
+        if (tfServerAddress.getText().isEmpty()) {
+            taMessage.setText("Server address should not be empty");
+            return false;
+        }
+
+        authController.setServerAddress(tfServerAddress.getText());
+        authController.postLogout();
+        this.dispose();
+
+        return true;
+    }
+
     private void initController() {
         orderItems = new ArrayList<>();
 
-        treesController = new TreesController();
-        shrubsController = new ShrubsController();
-        seedsController = new SeedsController();
-        cultureboxesController = new CultureboxesController();
-        genomicsController = new GenomicsController();
-        processingController = new ProcessingController();
-        referencematerialsController = new ReferencematerialsController();
+        treesController = new TreesController(session);
+        shrubsController = new ShrubsController(session);
+        seedsController = new SeedsController(session);
+        cultureboxesController = new CultureboxesController(session);
+        genomicsController = new GenomicsController(session);
+        processingController = new ProcessingController(session);
+        referencematerialsController = new ReferencematerialsController(session);
 
-        orderController = new OrderController();
-    }
-
-    private void initComponent() {
-
+        orderController = new OrderController(session);
+        authController = new AuthController(session);
     }
 
     private boolean getList(String selectedCategory) {
@@ -143,8 +201,14 @@ public class OrderAppFrame extends JFrame {
 
         ArrayList<Item> items = new ArrayList();
 
+        if (tfServerAddress.getText().isEmpty()) {
+            taMessage.setText("Server address should not be empty");
+            return false;
+        }
+
         if (selectedCategory != null) {
             InventoryController controller = getController(selectedCategory);
+            controller.setServerAddress(tfServerAddress.getText());
             items = controller.all();
             for (Item item : items) {
                 result += item.printItem(selectedCategory);
@@ -182,6 +246,11 @@ public class OrderAppFrame extends JFrame {
     private boolean getItem() {
         String selectedItem = taInventory.getSelectedText();
 
+        if (tfServerAddress.getText().isEmpty()) {
+            taMessage.setText("Server address should not be empty");
+            return false;
+        }
+
         if (selectedItem.isEmpty()) {
             taMessage.setText("Please select whole line of item by clicking 3 times");
             return false;
@@ -197,6 +266,7 @@ public class OrderAppFrame extends JFrame {
 
             if (list.contains(category)) {
                 InventoryController controller = getController(category);
+                controller.setServerAddress(tfServerAddress.getText());
 
                 // Here we get the trailing index and parse out the productID
                 int endIndex = itemString.indexOf(":", 0);
@@ -235,6 +305,11 @@ public class OrderAppFrame extends JFrame {
         String address = taAddress.getText();
         String phone = tfPhone.getText();
 
+        if (tfServerAddress.getText().isEmpty()) {
+            taMessage.setText("Server address should not be empty");
+            return false;
+        }
+
         if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || phone.isEmpty()) {
             taMessage.setText("Missing customer information!");
             return false;
@@ -252,6 +327,7 @@ public class OrderAppFrame extends JFrame {
         }
 
         Order order = new Order(firstName, lastName, address, phone, totalCost);
+        orderController.setServerAddress(tfServerAddress.getText());
         Order savedOrder = orderController.postOrder(order, orderItems);
 
         if (savedOrder != null) {

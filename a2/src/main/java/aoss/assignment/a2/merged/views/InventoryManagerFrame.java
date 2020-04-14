@@ -1,8 +1,10 @@
 package aoss.assignment.a2.merged.views;
 
 
+import aoss.assignment.a2.merged.controllers.auth.AuthController;
 import aoss.assignment.a2.merged.controllers.inventory.*;
 import aoss.assignment.a2.merged.models.Item;
+import aoss.assignment.a2.merged.models.UserSession;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -39,14 +41,19 @@ public class InventoryManagerFrame extends JFrame {
     private GenomicsController genomicsController;
     private ReferencematerialsController referencematerialsController;
     private ProcessingController processingController;
+    private AuthController authController;
 
-    public InventoryManagerFrame() {
+    private UserSession session;
+
+    public InventoryManagerFrame(UserSession session) {
         add(mainPanel);
         setTitle("New Invetory Manager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(950, 650);
 
-        initComponent();
+        this.session = session;
+        System.out.println("Session: " + session.getToken());
+
         initMenu();
         initController();
 
@@ -94,7 +101,7 @@ public class InventoryManagerFrame extends JFrame {
         menuOrder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                //TODO: Handle order frame
+                openOrderFrame();
             }
         });
 
@@ -108,24 +115,38 @@ public class InventoryManagerFrame extends JFrame {
         menuLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                //TODO: Handle logout frame
+                logout();
             }
         });
     }
 
-    private void initComponent() {
-        //TODO: Handle Component
+    private void openOrderFrame() {
+        java.awt.EventQueue.invokeLater(() -> new OrderAppFrame(session).setVisible(true));
+        this.dispose();
+    }
 
+    private boolean logout() {
+        if (tfServerAddress.getText().isEmpty()) {
+            taResult.setText("Server address should not be empty");
+            return false;
+        }
+
+        authController.setServerAddress(tfServerAddress.getText());
+        authController.postLogout();
+        this.dispose();
+
+        return true;
     }
 
     private void initController() {
-        treesController = new TreesController();
-        shrubsController = new ShrubsController();
-        seedsController = new SeedsController();
-        cultureboxesController = new CultureboxesController();
-        genomicsController = new GenomicsController();
-        processingController = new ProcessingController();
-        referencematerialsController = new ReferencematerialsController();
+        treesController = new TreesController(session);
+        shrubsController = new ShrubsController(session);
+        seedsController = new SeedsController(session);
+        cultureboxesController = new CultureboxesController(session);
+        genomicsController = new GenomicsController(session);
+        processingController = new ProcessingController(session);
+        referencematerialsController = new ReferencematerialsController(session);
+        authController = new AuthController(session);
     }
 
     private void getList() {
@@ -133,16 +154,21 @@ public class InventoryManagerFrame extends JFrame {
         String result = "";
 
         ArrayList<Item> items = new ArrayList();
+        if (!tfServerAddress.getText().isEmpty()) {
+            if (selectedCategory != null) {
+                InventoryController controller = getController(selectedCategory);
+                controller.setServerAddress(tfServerAddress.getText());
 
-        if (selectedCategory != null) {
-            InventoryController controller = getController(selectedCategory);
-            items = controller.all();
-            for (Item item : items) {
-                result += item.printItem(selectedCategory);
-                result += "\n";
+                items = controller.all();
+                for (Item item : items) {
+                    result += item.printItem(selectedCategory);
+                    result += "\n";
+                }
+            } else {
+                result = "Must select Category button";
             }
         } else {
-            result = "Must select Category button";
+            result = "Server address should not be empty";
         }
 
         taResult.setText(result);
@@ -152,6 +178,11 @@ public class InventoryManagerFrame extends JFrame {
         String id, description;
         int quantity;
         double price;
+
+        if (tfServerAddress.getText().isEmpty()) {
+            taResult.setText("Server address should not be empty");
+            return false;
+        }
 
         if (!tfId.getText().isEmpty()) {
             id = tfId.getText();
@@ -193,6 +224,8 @@ public class InventoryManagerFrame extends JFrame {
 
         String category = getSelectedCategory();
         InventoryController controller = getController(category);
+        controller.setServerAddress(tfServerAddress.getText());
+
         if (controller != null) {
             controller.create(new Item(id, description, quantity, price));
         } else {
@@ -207,6 +240,11 @@ public class InventoryManagerFrame extends JFrame {
 
     private boolean updateItem() {
         String selectedItem = taResult.getSelectedText();
+
+        if (tfServerAddress.getText().isEmpty()) {
+            taResult.setText("Server address should not be empty");
+            return false;
+        }
 
         if (selectedItem.isEmpty()) {
             taResult.setText("Please select whole line of item by clicking 3 times");
@@ -223,6 +261,7 @@ public class InventoryManagerFrame extends JFrame {
 
             if (list.contains(category)) {
                 InventoryController controller = getController(category);
+                controller.setServerAddress(tfServerAddress.getText());
 
                 // Here we get the trailing index and parse out the productID
                 int endIndex = itemString.indexOf(":", 0);
@@ -249,6 +288,12 @@ public class InventoryManagerFrame extends JFrame {
 
     private boolean deleteItem() {
         String selectedItem = taResult.getSelectedText();
+
+        if (tfServerAddress.getText().isEmpty()) {
+            taResult.setText("Server address should not be empty");
+            return false;
+        }
+
         if (selectedItem.isEmpty()) {
             taResult.setText("Please select whole line of item by clicking 3 times");
             return false;
@@ -264,6 +309,7 @@ public class InventoryManagerFrame extends JFrame {
 
             if (list.contains(category)) {
                 InventoryController controller = getController(category);
+                controller.setServerAddress(tfServerAddress.getText());
 
                 // Here we get the trailing index and parse out the productID
                 int endIndex = itemString.indexOf(":", 0);
@@ -336,10 +382,5 @@ public class InventoryManagerFrame extends JFrame {
             result = "REFERENCEMATERIAL";
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        InventoryManagerFrame frame = new InventoryManagerFrame();
-        frame.setVisible(true);
     }
 }
