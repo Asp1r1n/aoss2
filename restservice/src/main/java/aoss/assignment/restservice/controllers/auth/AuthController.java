@@ -4,12 +4,12 @@ package aoss.assignment.restservice.controllers.auth;
    Email: progingisfun@gmail.com
    Date: 14.04.2020 */
 
+import aoss.assignment.restservice.models.users.User;
 import aoss.assignment.restservice.services.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,5 +25,15 @@ public class AuthController {
     public String getToken(@RequestParam String login, @RequestParam String password){
         String token = usersService.login(login, password);
         return token.isEmpty() ? "Token not found" : token;
+    }
+
+    @PostMapping("/logout")
+    public User logout(@RequestHeader("Authorization") String authorization){
+        String token = authorization.substring(7).trim();
+        User logout = usersService.logout(token);
+        if(logout.getId() != 0){
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return logout;
     }
 }

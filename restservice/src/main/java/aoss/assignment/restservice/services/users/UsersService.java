@@ -48,7 +48,24 @@ public class UsersService {
         }
 
         return null;
+    }
 
+    public User logout(String token){
+        User user = findUserByToken(token);
+        if(user.getId() != 0){
+            user.setToken("");
+            user = updateUserById(user.getId(), user);
+        }
+        return user;
+    }
+
+    public User findUserByToken(String token){
+        User user = usersRepo.findByToken(token);
+        return user != null ? user : new User();
+    }
+
+    public User updateUserById(Integer id, User user){
+        return usersRepo.updateById(id,user);
     }
 
 
