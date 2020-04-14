@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inventory/trees")
+@RequestMapping("/db/inventory/trees")
 public class TreesController {
 
     private final TreesService treesService;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inventory/genomics")
+@RequestMapping("/db/inventory/genomics")
 public class GenomicsController {
 
     private final GenomicsService genomicsService;

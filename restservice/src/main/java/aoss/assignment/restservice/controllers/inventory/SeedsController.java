@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inventory/seeds")
+@RequestMapping("/db/inventory/seeds")
 public class SeedsController {
 
     private final SeedsService seedsService;
