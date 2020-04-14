@@ -4,9 +4,10 @@ package aoss.assignment.restservice.services.users;
    Email: progingisfun@gmail.com
    Date: 14.04.2020 */
 
+import aoss.assignment.restservice.models.users.AuthLog;
 import aoss.assignment.restservice.models.users.User;
+import aoss.assignment.restservice.repos.users.AuthLogsRepo;
 import aoss.assignment.restservice.repos.users.UsersRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ import java.util.UUID;
 public class UsersService {
 
     private final UsersRepo usersRepo;
+    private final AuthLogsRepo authLogsRepo;
 
-    public UsersService(UsersRepo usersRepo) {
+    public UsersService(UsersRepo usersRepo, AuthLogsRepo authLogsRepo) {
         this.usersRepo = usersRepo;
+        this.authLogsRepo = authLogsRepo;
     }
 
     public String login(String login, String password){
@@ -30,6 +33,7 @@ public class UsersService {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             usersRepo.updateById(user.getId(), user);
+            authLogsRepo.login(AuthLog.authLogWithUserAndCurrentTime(user.getId()));
             result = token;
         }
 
@@ -55,6 +59,7 @@ public class UsersService {
         if(user.getId() != 0){
             user.setToken("");
             user = updateUserById(user.getId(), user);
+            authLogsRepo.logoutByUserId(user.getId(), AuthLog.currentTime());
         }
         return user;
     }
