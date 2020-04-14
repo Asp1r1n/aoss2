@@ -39,6 +39,17 @@ public class SpringJdbcConfig {
         return dataSource;
     }
 
+    @Bean(name = "usersInfoSource")
+    public DataSource mysqlUsersDataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/users?serverTimezone=UTC");
+        dataSource.setUsername("root");
+        dataSource.setPassword("adminadmin");
+
+        return dataSource;
+    }
+
     @Bean(name = "inventoryJdbcTemplate")
     public JdbcTemplate inventoryJdbcTemplate(@Qualifier("inventorySource") DataSource dataSource){
         return new JdbcTemplate(dataSource);
@@ -46,6 +57,11 @@ public class SpringJdbcConfig {
 
     @Bean(name = "orderInfoJdbcTemplate")
     public JdbcTemplate orderInfoJdbcTemplate(@Qualifier("orderInfoSource") DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
+
+    @Bean(name = "usersJdbcTemplate")
+    public JdbcTemplate usersJdbcTemplate(@Qualifier("usersInfoSource") DataSource dataSource){
         return new JdbcTemplate(dataSource);
     }
 }

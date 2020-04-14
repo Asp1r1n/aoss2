@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inventory/processing")
+@RequestMapping("/db/inventory/processing")
 public class ProcessingsController {
 
     private final ProcessingsService processingsService;

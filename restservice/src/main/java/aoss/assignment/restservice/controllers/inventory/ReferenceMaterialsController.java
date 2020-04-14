@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inventory/referencematerials")
+@RequestMapping("/db/inventory/referencematerials")
 public class ReferenceMaterialsController {
 
     private final ReferenceMaterialsService referenceMaterialsService;
